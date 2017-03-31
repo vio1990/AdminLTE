@@ -10,11 +10,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-
-import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 
@@ -43,4 +42,20 @@ public class LteDataIntegrationTest {
         assertEquals("4.3", lteData.getEngineVersion());
         assertEquals("A", lteData.getCssGrade());
     }
+
+    @Test
+    @Sql(scripts = "/createLteData.sql")
+    public void getLteDataById() {
+        ResponseEntity<LteData> responseEntity =
+                restTemplate.getForEntity("/tables/data/2", LteData.class);
+        LteData lteData = responseEntity.getBody();
+
+        assertEquals(Long.valueOf(2), lteData.getId());
+        assertEquals("Gecko", lteData.getRenderingEngine());
+        assertEquals("Chrome 3.1", lteData.getBrowser());
+        assertEquals("60S", lteData.getPlatform());
+        assertEquals("3.2", lteData.getEngineVersion());
+        assertEquals("A", lteData.getCssGrade());
+    }
+
 }
