@@ -14,6 +14,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
 
+import java.util.Optional;
+
+import static org.junit.Assert.assertEquals;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = AdminLteApplication.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -28,10 +32,15 @@ public class LteDataIntegrationTest {
     public void addLteData() {
         ResponseEntity<LteData> responseEntity =
                 restTemplate.postForEntity("/tables/data/add",
-                        new LteData(6L, "Webkit", "Safari 1.2", "S60", "4.3", "A"),
+                        new LteData(1L, "Webkit", "Safari 1.2", "S60", "4.3", "A"),
                         LteData.class);
         LteData lteData = responseEntity.getBody();
 
-
+        assertEquals(Long.valueOf(1), lteData.getId());
+        assertEquals("Webkit", lteData.getRenderingEngine());
+        assertEquals("Safari 1.2", lteData.getBrowser());
+        assertEquals("S60", lteData.getPlatform());
+        assertEquals("4.3", lteData.getEngineVersion());
+        assertEquals("A", lteData.getCssGrade());
     }
 }

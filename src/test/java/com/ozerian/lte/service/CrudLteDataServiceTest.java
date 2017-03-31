@@ -33,6 +33,7 @@ public class CrudLteDataServiceTest {
         LteData savedLteData = dataService.saveLteData(testLteData);
 
         verify(dataRepository, times(1)).save(savedLteData);
+        assertEquals(Long.valueOf(1), savedLteData.getId());
         assertEquals("Gecko", savedLteData.getRenderingEngine());
         assertEquals("FireFox 1.0", savedLteData.getBrowser());
         assertEquals("OSX.3+", savedLteData.getPlatform());
@@ -49,6 +50,7 @@ public class CrudLteDataServiceTest {
         LteData gotLteData = dataService.getLteDataById(id);
 
         verify(dataRepository, times(1)).findOne(id);
+        assertEquals(Long.valueOf(2), gotLteData.getId());
         assertEquals("Trident", gotLteData.getRenderingEngine());
         assertEquals("Safari 1.2", gotLteData.getBrowser());
         assertEquals("S60", gotLteData.getPlatform());
@@ -82,6 +84,7 @@ public class CrudLteDataServiceTest {
         assertEquals(2, gotLteDataList.size());
 
         //assert first LteData
+        assertEquals(Long.valueOf(4), gotLteDataList.get(0).getId());
         assertEquals("Trident", gotLteDataList.get(0).getRenderingEngine());
         assertEquals("Safari 1.2", gotLteDataList.get(0).getBrowser());
         assertEquals("S60", gotLteDataList.get(0).getPlatform());
@@ -89,6 +92,7 @@ public class CrudLteDataServiceTest {
         assertEquals("A", gotLteDataList.get(0).getCssGrade());
 
         //assert second LteData
+        assertEquals(Long.valueOf(5), gotLteDataList.get(1).getId());
         assertEquals("Gecko", gotLteDataList.get(1).getRenderingEngine());
         assertEquals("FireFox 1.0", gotLteDataList.get(1).getBrowser());
         assertEquals("OSX.3+", gotLteDataList.get(1).getPlatform());
@@ -112,6 +116,7 @@ public class CrudLteDataServiceTest {
         assertEquals(2, gotLteDataList.size());
 
         //assert first LteData
+        assertEquals(Long.valueOf(6), gotLteDataList.get(0).getId());
         assertEquals("Webkit", gotLteDataList.get(0).getRenderingEngine());
         assertEquals("Safari 1.2", gotLteDataList.get(0).getBrowser());
         assertEquals("S60", gotLteDataList.get(0).getPlatform());
@@ -119,6 +124,7 @@ public class CrudLteDataServiceTest {
         assertEquals("A", gotLteDataList.get(0).getCssGrade());
 
         //assert second LteData
+        assertEquals(Long.valueOf(7), gotLteDataList.get(1).getId());
         assertEquals("Gecko", gotLteDataList.get(1).getRenderingEngine());
         assertEquals("FireFox 1.0", gotLteDataList.get(1).getBrowser());
         assertEquals("iPod", gotLteDataList.get(1).getPlatform());
