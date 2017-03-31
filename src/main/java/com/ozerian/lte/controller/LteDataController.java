@@ -25,7 +25,7 @@ public class LteDataController {
     private CrudLteDataService lteDataService;
 
     /**
-     * Retrieves the list of LteData entities inside of ResponseEntity with Http status OK.
+     * Retrieve the list of LteData entities inside of ResponseEntity with Http status OK.
      *
      * @return ResponseEntity with Http status OK and list of LteData in JSON format.
      */
@@ -42,7 +42,7 @@ public class LteDataController {
     }
 
     /**
-     * Retrieves the LteData entity by it's id inside of ResponseEntity with Http status OK.
+     * Retrieve the LteData entity by it's id inside of ResponseEntity with Http status OK.
      *
      * @param id Long id of specific LteData for getting.
      * @return ResponseEntity with Http status OK and LteData in JSON format.
@@ -114,7 +114,7 @@ public class LteDataController {
     }
 
     /**
-     * Retrieves the list of LteData entities ordered by Rendering engine inside of ResponseEntity
+     * Retrieve the list of LteData entities ordered by Rendering engine inside of ResponseEntity
      * with Http status OK.
      *
      * @return ResponseEntity with Http status OK and ordered list of LteData in JSON format.
