@@ -10,7 +10,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "LteData")
 @Getter
-@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
