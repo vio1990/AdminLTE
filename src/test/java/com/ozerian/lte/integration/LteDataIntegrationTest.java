@@ -22,6 +22,7 @@ import static org.junit.Assert.assertEquals;
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestPropertySource(locations = "classpath:test.properties")
 @AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@Sql(scripts = "/createLteData.sql")
 public class LteDataIntegrationTest {
 
     @Inject
@@ -31,11 +32,11 @@ public class LteDataIntegrationTest {
     public void addLteData() {
         ResponseEntity<LteData> responseEntity =
                 restTemplate.postForEntity("/tables/data/add",
-                        new LteData(1L, "Webkit", "Safari 1.2", "S60", "4.3", "A"),
+                        new LteData(4L, "Webkit", "Safari 1.2", "S60", "4.3", "A"),
                         LteData.class);
         LteData lteData = responseEntity.getBody();
 
-        assertEquals(Long.valueOf(1), lteData.getId());
+        assertEquals(Long.valueOf(4L), lteData.getId());
         assertEquals("Webkit", lteData.getRenderingEngine());
         assertEquals("Safari 1.2", lteData.getBrowser());
         assertEquals("S60", lteData.getPlatform());
@@ -44,7 +45,6 @@ public class LteDataIntegrationTest {
     }
 
     @Test
-    @Sql(scripts = "/createLteData.sql")
     public void getLteDataById() {
         ResponseEntity<LteData> responseEntity =
                 restTemplate.getForEntity("/tables/data/2", LteData.class);
