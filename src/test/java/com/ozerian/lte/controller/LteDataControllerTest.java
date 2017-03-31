@@ -1,5 +1,6 @@
 package com.ozerian.lte.controller;
 
+import com.google.gson.Gson;
 import com.ozerian.lte.AdminLteApplication;
 import com.ozerian.lte.model.LteData;
 import com.ozerian.lte.service.CrudLteDataService;
@@ -46,10 +47,8 @@ public class LteDataControllerTest {
 
     @Test
     public void getAllLteData() throws Exception {
-        LteData firstLteData = new LteData(6L, "Webkit", "Safari 1.2",
-                "S60", "4.3", "A");
-        LteData secondLteData = new LteData(7L, "Gecko", "FireFox 1.0",
-                "iPod", "1.7", "A");
+        LteData firstLteData = new LteData(6L, "Webkit", "Safari 1.2", "S60", "4.3", "A");
+        LteData secondLteData = new LteData(7L, "Gecko", "FireFox 1.0", "iPod", "1.7", "A");
         List<LteData> allLteDataList = new ArrayList<>();
         allLteDataList.add(firstLteData);
         allLteDataList.add(secondLteData);
@@ -61,34 +60,28 @@ public class LteDataControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String expectedResult = new StringBuilder()
-                .append("[{")
-                .append("\"id\":6,")
-                .append("\"renderingEngine\":\"Webkit\",")
-                .append("\"browser\":\"Safari 1.2\",")
-                .append("\"platform\":\"S60\",")
-                .append("\"engineVersion\":\"4.3\",")
-                .append("\"cssGrade\":\"A\"")
-                .append("},{")
-                .append("\"id\":7,")
-                .append("\"renderingEngine\":\"Gecko\",")
-                .append("\"browser\":\"FireFox 1.0\",")
-                .append("\"platform\":\"iPod\",")
-                .append("\"engineVersion\":\"1.7\",")
-                .append("\"cssGrade\":\"A\"")
-                .append("}]")
-                .toString();
-
         String actualResult = result.getResponse().getContentAsString();
-        assertNotNull(result.getResponse().getContentAsString());
-        assertEquals(expectedResult, actualResult);
+
+        assertNotNull(actualResult);
+        assertTrue(actualResult.contains("6"));
+        assertTrue(actualResult.contains("Webkit"));
+        assertTrue(actualResult.contains("Safari 1.2"));
+        assertTrue(actualResult.contains("S60"));
+        assertTrue(actualResult.contains("4.3"));
+        assertTrue(actualResult.contains("A"));
+
+        assertTrue(actualResult.contains("7"));
+        assertTrue(actualResult.contains("Gecko"));
+        assertTrue(actualResult.contains("FireFox 1.0"));
+        assertTrue(actualResult.contains("iPod"));
+        assertTrue(actualResult.contains("1.7"));
+        assertTrue(actualResult.contains("A"));
     }
 
     @Test
     public void getLteDataById() throws Exception {
         Long id = 1L;
-        LteData testLteData = new LteData(id, "Gecko", "FireFox 1.0",
-                "OSX.3+", "1.7", "A");
+        LteData testLteData = new LteData(id, "Gecko", "FireFox 1.0", "OSX.3+", "1.7", "A");
 
         when(lteDataService.getLteDataById(id)).thenReturn(testLteData);
 
@@ -97,20 +90,15 @@ public class LteDataControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String expectedResult = new StringBuilder()
-                .append("{")
-                .append("\"id\":1,")
-                .append("\"renderingEngine\":\"Gecko\",")
-                .append("\"browser\":\"FireFox 1.0\",")
-                .append("\"platform\":\"OSX.3+\",")
-                .append("\"engineVersion\":\"1.7\",")
-                .append("\"cssGrade\":\"A\"")
-                .append("}")
-                .toString();
-
         String actualResult = result.getResponse().getContentAsString();
-        assertNotNull(result.getResponse().getContentAsString());
-        assertEquals(expectedResult, actualResult);
+
+        assertNotNull(actualResult);
+        assertTrue(actualResult.contains("1"));
+        assertTrue(actualResult.contains("Gecko"));
+        assertTrue(actualResult.contains("FireFox 1.0"));
+        assertTrue(actualResult.contains("OSX.3+"));
+        assertTrue(actualResult.contains("1.7"));
+        assertTrue(actualResult.contains("A"));
     }
 
     @Test
@@ -124,19 +112,62 @@ public class LteDataControllerTest {
 
     @Test
     public void addLteData() throws Exception {
+        Long id = 1L;
+        LteData testLteData = new LteData(id, "Gecko", "FireFox 1.0", "OSX.3+", "3.5", "A");
 
+        when(lteDataService.saveLteData(testLteData)).thenReturn(testLteData);
+
+        Gson gson = new Gson();
+        String jsonLteData = gson.toJson(testLteData);
+
+        MvcResult result = mockMvc.perform(post("/tables/data/add")
+                .content(jsonLteData)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actualResult = result.getResponse().getContentAsString();
+
+        assertNotNull(actualResult);
+        assertTrue(actualResult.contains("1"));
+        assertTrue(actualResult.contains("Gecko"));
+        assertTrue(actualResult.contains("FireFox 1.0"));
+        assertTrue(actualResult.contains("OSX.3+"));
+        assertTrue(actualResult.contains("3.5"));
+        assertTrue(actualResult.contains("A"));
     }
 
     @Test
     public void updateLteData() throws Exception {
+        Long id = 2L;
+        LteData testLteData = new LteData(id, "Webkit", "Safari 1.2", "OSX.3+", "2.5", "A");
+
+        when(lteDataService.saveLteData(testLteData)).thenReturn(testLteData);
+
+        Gson gson = new Gson();
+        String jsonLteData = gson.toJson(testLteData);
+
+        MvcResult result = mockMvc.perform(post("/tables/data/update")
+                .content(jsonLteData)
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String actualResult = result.getResponse().getContentAsString();
+
+        assertNotNull(actualResult);
+        assertTrue(actualResult.contains("2"));
+        assertTrue(actualResult.contains("Webkit"));
+        assertTrue(actualResult.contains("Safari 1.2"));
+        assertTrue(actualResult.contains("OSX.3+"));
+        assertTrue(actualResult.contains("2.5"));
+        assertTrue(actualResult.contains("A"));
     }
 
     @Test
     public void getOrderedByRenEngineLteData() throws Exception {
-        LteData firstLteData = new LteData(8L, "Trident", "Safari 1.2",
-                "OSX.3", "4.3", "A");
-        LteData secondLteData = new LteData(9L, "Gecko", "FireFox 1.0",
-                "iPod", "1.7", "A");
+        LteData firstLteData = new LteData(8L, "Trident", "Safari 1.2", "OSX.3", "4.3", "A");
+        LteData secondLteData = new LteData(9L, "Gecko", "FireFox 1.0", "iPod", "1.7", "A");
         List<LteData> allLteDataList = new ArrayList<>();
         allLteDataList.add(firstLteData);
         allLteDataList.add(secondLteData);
@@ -148,27 +179,22 @@ public class LteDataControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        String expectedResult = new StringBuilder()
-                .append("[{")
-                .append("\"id\":8,")
-                .append("\"renderingEngine\":\"Trident\",")
-                .append("\"browser\":\"Safari 1.2\",")
-                .append("\"platform\":\"OSX.3\",")
-                .append("\"engineVersion\":\"4.3\",")
-                .append("\"cssGrade\":\"A\"")
-                .append("},{")
-                .append("\"id\":9,")
-                .append("\"renderingEngine\":\"Gecko\",")
-                .append("\"browser\":\"FireFox 1.0\",")
-                .append("\"platform\":\"iPod\",")
-                .append("\"engineVersion\":\"1.7\",")
-                .append("\"cssGrade\":\"A\"")
-                .append("}]")
-                .toString();
-
         String actualResult = result.getResponse().getContentAsString();
-        assertNotNull(result.getResponse().getContentAsString());
-        assertEquals(expectedResult, actualResult);
+
+        assertNotNull(actualResult);
+        assertTrue(actualResult.contains("8"));
+        assertTrue(actualResult.contains("Trident"));
+        assertTrue(actualResult.contains("Safari 1.2"));
+        assertTrue(actualResult.contains("OSX.3"));
+        assertTrue(actualResult.contains("4.3"));
+        assertTrue(actualResult.contains("A"));
+
+        assertTrue(actualResult.contains("9"));
+        assertTrue(actualResult.contains("Gecko"));
+        assertTrue(actualResult.contains("FireFox 1.0"));
+        assertTrue(actualResult.contains("iPod"));
+        assertTrue(actualResult.contains("1.7"));
+        assertTrue(actualResult.contains("A"));
     }
 
 }

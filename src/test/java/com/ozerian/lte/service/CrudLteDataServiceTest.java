@@ -27,8 +27,7 @@ public class CrudLteDataServiceTest {
 
     @Test
     public void saveLteData() throws Exception {
-        LteData testLteData = new LteData(1L, "Gecko", "FireFox 1.0",
-                "OSX.3+", "1.7", "A");
+        LteData testLteData = new LteData(1L, "Gecko", "FireFox 1.0", "OSX.3+", "1.7", "A");
         when(dataRepository.save(testLteData)).thenReturn(testLteData);
 
         LteData savedLteData = dataService.saveLteData(testLteData);
@@ -44,8 +43,7 @@ public class CrudLteDataServiceTest {
     @Test
     public void getLteDataById() throws Exception {
         Long id = 2L;
-        LteData testLteData = new LteData(id, "Trident", "Safari 1.2",
-                "S60", "4", "A");
+        LteData testLteData = new LteData(id, "Trident", "Safari 1.2", "S60", "4", "A");
         when(dataRepository.findOne(id)).thenReturn(testLteData);
 
         LteData gotLteData = dataService.getLteDataById(id);
@@ -61,8 +59,7 @@ public class CrudLteDataServiceTest {
     @Test
     public void deleteLteDataById() throws Exception {
         Long id = 3L;
-        LteData testLteData = new LteData(id, "Trident", "Safari 1.2",
-                "S60", "4", "A");
+        LteData testLteData = new LteData(id, "Trident", "Safari 1.2", "S60", "4", "A");
 
         dataService.deleteLteDataById(testLteData.getId());
 
@@ -71,10 +68,8 @@ public class CrudLteDataServiceTest {
 
     @Test
     public void getAllLteData() throws Exception {
-        LteData firstLteData = new LteData(4L, "Trident", "Safari 1.2",
-                "S60", "4", "A");
-        LteData secondLteData = new LteData(5L, "Gecko", "FireFox 1.0",
-                "OSX.3+", "1.7", "A");
+        LteData firstLteData = new LteData(4L, "Trident", "Safari 1.2", "S60", "4", "A");
+        LteData secondLteData = new LteData(5L, "Gecko", "FireFox 1.0", "OSX.3+", "1.7", "A");
         List<LteData> allLteDataList = new ArrayList<>();
         allLteDataList.add(firstLteData);
         allLteDataList.add(secondLteData);
@@ -103,19 +98,17 @@ public class CrudLteDataServiceTest {
 
     @Test
     public void getAllLteDataGroupedByRenderingName() throws Exception {
-        LteData firstLteData = new LteData(6L, "Webkit", "Safari 1.2",
-                "S60", "4.3", "A");
-        LteData secondLteData = new LteData(7L, "Gecko", "FireFox 1.0",
-                "iPod", "1.7", "A");
+        LteData firstLteData = new LteData(6L, "Webkit", "Safari 1.2", "S60", "4.3", "A");
+        LteData secondLteData = new LteData(7L, "Gecko", "FireFox 1.0", "iPod", "1.7", "A");
         List<LteData> allLteDataList = new ArrayList<>();
         allLteDataList.add(firstLteData);
         allLteDataList.add(secondLteData);
 
-        when(dataRepository.findAll()).thenReturn(allLteDataList);
+        when(dataRepository.findAllByOrderByRenderingEngine()).thenReturn(allLteDataList);
 
-        List<LteData> gotLteDataList = dataService.getAllLteData();
+        List<LteData> gotLteDataList = dataService.getAllLteDataGroupedByRenderingName();
 
-        verify(dataRepository, times(1)).findAll();
+        verify(dataRepository, times(1)).findAllByOrderByRenderingEngine();
         assertEquals(2, gotLteDataList.size());
 
         //assert first LteData
