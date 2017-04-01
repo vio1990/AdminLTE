@@ -4,9 +4,12 @@ import com.google.gson.Gson;
 import com.ozerian.lte.AdminLteApplication;
 import com.ozerian.lte.model.LteData;
 import com.ozerian.lte.service.CrudLteDataService;
+import com.sun.org.apache.xpath.internal.operations.Lte;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -25,9 +28,7 @@ import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -60,6 +61,8 @@ public class LteDataControllerTest {
                 .andExpect(status().isOk())
                 .andReturn();
 
+        verify(lteDataService, times(1)).getAllLteData();
+
         String actualResult = result.getResponse().getContentAsString();
 
         assertNotNull(actualResult);
@@ -76,6 +79,17 @@ public class LteDataControllerTest {
         assertTrue(actualResult.contains("iPod"));
         assertTrue(actualResult.contains("1.7"));
         assertTrue(actualResult.contains("A"));
+    }
+
+    @Test
+    public void getAllLteDataWhenNotFound() throws Exception {
+        when(lteDataService.getAllLteData()).thenReturn(null);
+
+        mockMvc.perform(get("/tables/data")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(lteDataService, times(1)).getAllLteData();
     }
 
     @Test
@@ -99,6 +113,17 @@ public class LteDataControllerTest {
         assertTrue(actualResult.contains("OSX.3+"));
         assertTrue(actualResult.contains("1.7"));
         assertTrue(actualResult.contains("A"));
+    }
+
+    @Test
+    public void getLteDataByIdWhenNotFound() throws Exception {
+        when(lteDataService.getLteDataById(2L)).thenReturn(null);
+
+        mockMvc.perform(get("/tables/data/2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(lteDataService, times(1)).getLteDataById(2L);
     }
 
     @Test
@@ -138,6 +163,17 @@ public class LteDataControllerTest {
     }
 
     @Test
+    public void addLteDataByIdWhenBadRequest() throws Exception {
+
+        mockMvc.perform(post("/tables/data/update")
+                // content is empty.
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(lteDataService, times(0)).saveLteData(any(LteData.class));
+    }
+
+    @Test
     public void updateLteData() throws Exception {
         Long id = 2L;
         LteData testLteData = new LteData(id, "Webkit", "Safari 1.2", "OSX.3+", "2.5", "A");
@@ -162,6 +198,16 @@ public class LteDataControllerTest {
         assertTrue(actualResult.contains("OSX.3+"));
         assertTrue(actualResult.contains("2.5"));
         assertTrue(actualResult.contains("A"));
+    }
+
+    @Test
+    public void updateLteDataByIdWhenBadRequest() throws Exception {
+        mockMvc.perform(post("/tables/data/update")
+                //content is empty.
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+
+        verify(lteDataService, times(0)).saveLteData(any(LteData.class));
     }
 
     @Test
@@ -195,6 +241,17 @@ public class LteDataControllerTest {
         assertTrue(actualResult.contains("iPod"));
         assertTrue(actualResult.contains("1.7"));
         assertTrue(actualResult.contains("A"));
+    }
+
+    @Test
+    public void getOrderedByRenEngineLteDataWhenNotFound() throws Exception {
+        when(lteDataService.getAllLteDataGroupedByRenderingName()).thenReturn(null);
+
+        mockMvc.perform(get("/tables/data/ordered")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+        verify(lteDataService, times(0)).getAllLteData();
     }
 
 }
