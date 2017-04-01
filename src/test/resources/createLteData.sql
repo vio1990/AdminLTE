@@ -1,4 +1,5 @@
-CREATE TABLE IF NOT EXISTS LteData (
+DROP TABLE IF EXISTS LteData;
+CREATE TABLE LteData (
   Id              LONG AUTO_INCREMENT,
   RenderingEngine VARCHAR(45),
   Browser         VARCHAR(45),
