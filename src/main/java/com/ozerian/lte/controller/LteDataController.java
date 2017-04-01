@@ -98,6 +98,11 @@ public class LteDataController {
     public ResponseEntity<?> addLteData(@RequestBody LteData data) {
         logger.debug("Execution of addLteData");
 
+        if (data == null) {
+            logger.debug("Request body entity is null!");
+            return ResponseEntity.badRequest().build();
+        }
+
         LteData savedLteData = lteDataService.saveLteData(data);
 
         logger.debug("Saved LteData is '{}'", savedLteData.toString());
@@ -115,6 +120,11 @@ public class LteDataController {
     @ResponseBody
     public ResponseEntity<?> updateLteData(@RequestBody LteData data) {
         logger.debug("Execution of updateLteData");
+
+        if (data == null) {
+            logger.debug("Request body entity is null!");
+            return ResponseEntity.badRequest().build();
+        }
 
         LteData updatedLteData = lteDataService.saveLteData(data);
 
