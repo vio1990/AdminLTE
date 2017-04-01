@@ -36,6 +36,11 @@ public class LteDataController {
 
         List<LteData> lteDataList = lteDataService.getAllLteData();
 
+        if (lteDataList == null) {
+            logger.error("Got lte data list is null!");
+            return ResponseEntity.notFound().build();
+        }
+
         logger.debug("Lte date list size is '{}'", lteDataList);
 
         return ResponseEntity.ok(lteDataList);
@@ -53,6 +58,11 @@ public class LteDataController {
         logger.debug("Execution of getLteDataById");
 
         LteData gotLteData = lteDataService.getLteDataById(id);
+
+        if (gotLteData == null) {
+            logger.error("Got lte data entity is null!");
+            return ResponseEntity.notFound().build();
+        }
 
         logger.debug("Got lte data is '{}'", gotLteData.toString());
 
@@ -125,6 +135,11 @@ public class LteDataController {
         logger.debug("Execution of getOrderedByRenEngineLteData");
 
         List<LteData> orderedLteDataList = lteDataService.getAllLteDataGroupedByRenderingName();
+
+        if (orderedLteDataList == null) {
+            logger.error("Ordered lte data list is null!");
+            return ResponseEntity.notFound().build();
+        }
 
         logger.debug("Ordered LteData lists's size is '{}'", orderedLteDataList.size());
 
