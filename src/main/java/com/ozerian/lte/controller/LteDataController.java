@@ -37,7 +37,7 @@ public class LteDataController {
         List<LteData> lteDataList = lteDataService.getAllLteData();
 
         if (lteDataList == null) {
-            logger.error("Got lte data list is null!");
+            logger.info("Got lte data list is null!");
             return ResponseEntity.notFound().build();
         }
 
@@ -60,7 +60,7 @@ public class LteDataController {
         LteData gotLteData = lteDataService.getLteDataById(id);
 
         if (gotLteData == null) {
-            logger.error("Got lte data entity is null!");
+            logger.info("Got lte data entity is null!");
             return ResponseEntity.notFound().build();
         }
 
@@ -99,7 +99,7 @@ public class LteDataController {
         logger.debug("Execution of addLteData");
 
         if (data == null) {
-            logger.debug("Request body entity is null!");
+            logger.info("Request body entity is null!");
             return ResponseEntity.badRequest().build();
         }
 
@@ -122,7 +122,7 @@ public class LteDataController {
         logger.debug("Execution of updateLteData");
 
         if (data == null) {
-            logger.debug("Request body entity is null!");
+            logger.info("Request body entity is null!");
             return ResponseEntity.badRequest().build();
         }
 
@@ -147,7 +147,7 @@ public class LteDataController {
         List<LteData> orderedLteDataList = lteDataService.getAllLteDataGroupedByRenderingName();
 
         if (orderedLteDataList == null) {
-            logger.error("Ordered lte data list is null!");
+            logger.info("Ordered lte data list is null!");
             return ResponseEntity.notFound().build();
         }
 
